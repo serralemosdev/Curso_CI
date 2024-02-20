@@ -5,53 +5,42 @@ name: Go
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ "*" ]
+    branches: [ '*' ]
 
 jobs:
-  
 
   test:
-    env:
-      HOST: localhost
-      PORT: 5432
-      USER: root
-      PASSWORD: root
-      DBNAME: root
-      
-    runs-on: ${{matrix.os}}
+    runs-on: ubuntu-latest
     strategy:
-      matrix: 
+      matrix:
         go_version: ['1.18', '1.17', '>=1.18']
-        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v3
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v3
       with:
-        go-version: ${{matrix.go-version}}
-        
+        go-version: ${{ matrix.go_version }}
+      
     - name: Build-DB
       run: docker-compose build
-
+      
     - name: Create-DB
       run: docker-compose up -d
 
     - name: Test
-      run: go test -v main_test.go
-
+      run: go test -v main_test.go 
+      
+  
   build:
     needs: test
-    runs-on: ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
     strategy:
-      matrix: 
+      matrix:
         os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v3
-
     - name: Build
       run: go build -v main.go
-
-    
