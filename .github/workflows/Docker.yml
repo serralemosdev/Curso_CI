@@ -31,4 +31,4 @@ jobs:
         # Push is a shorthand for --output=type=registry
         push: true
         # List of tags
-        tags: serralemosdev/go_ci:&{{github.ref_name}}      
+        tags: serralemosdev/go_ci:${{ github.ref_name }}      
